@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WalletPage</title>
+    <link rel = "stylesheet" href="walletPage.css">
+
+</head>
+<body>
+    <div class="Title">
+        <h4>Wallet Page</h4>
+        <br>
+        <label for="port">Portfolio Value:    </label>
+        <strong id="port"></strong>
+        <br>
+        <br>
+        
+    </div>
+   
+    <div>
+        <table style="width: 100%;"> 
+            <tr>
+                <th style="width: 50%;">Token</th>
+                <th>Quantity</th>
+                <th>Value</th>
+            </tr>
+            <tr style="height: 50px;">
+                <td id="eth">ETH</td>
+                <td id="ethQuant">Loading....</td>
+                <td id="ethPrice"></td>
+            </tr>
+            <tr style="height: 50px;">
+                <td id="LINK">LINK</td>
+                <td id="linkQuant">Loading....</td>
+                <td id="linkPrice"></td>
+            </tr>
+            <tr style="height: 50px;">
+                <td id="BAT">BAT</td>
+                <td id="batQuant">Loading....</td>
+                <td id="batPrice"></td>
+            </tr>
+            <tr style="height: 50px;">
+                <td id="REP">REP</td>
+                <td id="repQuant">Loading....</td>
+                <td id="repPrice"></td>
+            </tr>
+        </table>
+      
+    </div>
+    <script>
+         const fs = require("fs")
+        const currentSeed = fs.readFileSync("CurrentSeed.txt","utf-8").trim();
+        
+        console.log(currentSeed)
+        console.log(typeof(currentSeed))
+
+
+        const {MongoClient} = require('mongodb');
+
+        async function findUserBySeed(client,seedPhrase){
+            const result = await client.db("WalletUsers").collection("UserValues").findOne({seed: seedPhrase})
+            if (result){
+                console.log(`Found a user with the seed phrase '${seedPhrase}'`);
+                console.log(result)
+                fs.writeFileSync("CurrentQuants.txt",result['EthQuant']+"\r\n");
+                fs.appendFileSync("CurrentQuants.txt",result['LinkQuant'] + "\r\n");
+                fs.appendFileSync("CurrentQuants.txt",result['BatQuant'] + "\r\n");
+                fs.appendFileSync("CurrentQuants.txt",result['RepQuant'] + "\r\n");
+            }else{
+               console.log(`No user found with the seed '${seedPhrase}'`); 
+            }
+        }
+
+        
+        async function main(currentSeed) {
+        const uri = "mongodb+srv://guacamole:Stpeters565@cluster0.l6stk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+  
+        const client = new MongoClient(uri);
+        try{
+            await client.connect();
+            await findUserBySeed(client,currentSeed)
+        } catch(e){
+            console.error(e);
+        } finally{
+            await client.close()
+        }
+        }
+
+      
+   
+
+
+
+
+
+       
+        
+        async function values(){
+        await main(currentSeed)
+        const quants = fs.readFileSync('CurrentQuants.txt','utf-8') 
+        const data = fs.readFileSync('Prices.txt','utf-8') 
+        
+        const quant = quants.split("\n") 
+        var priceByLine = data.split("\n")
+
+
+        document.getElementById("ethQuant").innerHTML = quant[0]
+        var temp2 = parseInt(document.getElementById("ethQuant").innerHTML)
+        ethValue = parseInt(priceByLine[0])*temp2
+        document.getElementById("ethPrice").innerHTML = "£" + (priceByLine[0]*temp2);
+
+       
+        document.getElementById("linkQuant").innerHTML = quant[1]
+        var temp3 = parseInt(document.getElementById("linkQuant").innerHTML)
+        linkValue = parseInt(priceByLine[1])*temp3
+        document.getElementById("linkPrice").innerHTML = "£" + (priceByLine[1]*temp3);
+
+
+        document.getElementById("batQuant").innerHTML = quant[2]
+        var temp4 = parseInt(document.getElementById("batQuant").innerHTML)
+        batValue = parseInt(priceByLine[2])*temp4
+        document.getElementById("batPrice").innerHTML = "£" + (priceByLine[2]*temp4);
+
+        document.getElementById("repQuant").innerHTML = quant[3]
+        var temp5 = parseInt(document.getElementById("repQuant").innerHTML)
+        repValue =  parseInt(priceByLine[3])*temp5
+        document.getElementById("repPrice").innerHTML = "£" + (priceByLine[3]*temp5);
+        
+        console.log(parseInt(ethValue))
+        document.getElementById("port").innerHTML = "£" + (parseInt(ethValue)+parseInt(linkValue)+parseInt(batValue)+parseInt(repValue))
+        }
+        values()
+        
+    </script>
+</body>
+</html>

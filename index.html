@@ -1,0 +1,85 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>IPC test app</title>
+    <link rel = "stylesheet" href="style.css">
+
+    <script>
+        const { ipcRenderer } = require('electron');
+        const fs = require("fs");
+        const remote = require('electron').remote;
+        /** Define channel name */
+        const CHANNEL_NAME = 'main';
+
+        /** Create a processor for a button's click event */
+        const generateSeed = () => {
+          /** Message to be sent */
+          let message = 'ping';
+
+          /** Show response for a sync IPC request */
+          console.log(ipcRenderer.sendSync(CHANNEL_NAME, message));
+          document.getElementById("Phrase").innerHTML = "Your Seed phrase has been saved to your system"
+          const phrases = fs.readFileSync("SeedPhrases.txt","utf-8");
+          var textByLine = phrases.split("\n")
+          console.log(textByLine)
+         
+          alert("Your seed phrase is :" + textByLine[textByLine.length -2 ] + "please take this down so you can restore your account if you get logged out")
+          const window = remote.getCurrentWindow()
+          window.close()
+        }
+
+        const CHANNEL_NAME2 = 'main2'
+        const restoreWallet = () => {
+          /** Message to be sent */
+          let message = document.getElementById("seedLoadValue").value;
+
+          /** Show response for a sync IPC request */
+          console.log(ipcRenderer.sendSync(CHANNEL_NAME2, message));
+          
+
+        }
+
+        const CHANNEL_NAME3 = 'main3'
+        const openGuide = () => {
+          
+          
+
+          /** Show response for a sync IPC request */
+          console.log(ipcRenderer.sendSync(CHANNEL_NAME3, "openGuide"));
+          
+
+        }
+    </script>
+</head>
+<body>
+    <h2>Login or Generate new wallet</h2>
+
+    <div class="login">
+      <h3>Login</h3>
+
+      Enter Seed Phrase: 
+      <br/>
+      <input id="seedLoadValue" type="text">
+      <button onclick="restoreWallet()">Restore Wallet</button>
+
+    </div>
+
+
+
+    <div class="register">
+    <button onclick="generateSeed()">Generate Seed</button>
+    <br/>
+    Phrase: <strong style="color: green;" id="Phrase"></strong>
+  
+    
+  </div>
+
+
+  
+  <div class="GettingStarted">
+    <button onclick="openGuide()" id="GettingStarted">Getting Started</button>
+  </div>
+    
+    
+</body>
+</html>

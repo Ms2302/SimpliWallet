@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>IPC test app</title>
+    <p id="tester"></p>
+    <script>
+        const { ipcRenderer } = require('electron');
+
+        /** Define channel name */
+        
+
+        const CHANNEL_NAME2 = 'main';
+        const store = ""
+   
+    function func(data){
+        document.getElementById("tester").innerHTML = data
+    }
+
+
+    ipcRenderer.on(CHANNEL_NAME2, (event, data) => {
+        
+        func(data)
+    
+});
+    </script>
+</head>
+<body>
+    <button onclick="clickButton()">Press me</button>
+    <button onclick="func()">Test</button>
+</body>
+</html>

@@ -1,0 +1,13 @@
+label{
+    margin-left: 30px;
+}
+
+table, th, td {
+    text-align: left;
+    border: 1px solid white;
+    border-collapse: collapse;
+  }
+  th, td {
+      padding-left: 15px;
+    background-color: #96D4D4;
+  }
