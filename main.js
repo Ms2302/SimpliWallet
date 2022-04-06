@@ -82,6 +82,7 @@ price()
 
 const createWindow = () => {
   mainWindow = new BrowserWindow({
+    alwaysOnTop: true,
     webPreferences: {
       /** Enable node integration */
       nodeIntegration: true,
@@ -100,6 +101,7 @@ const createWindow = () => {
 const createWalletWindow = () => {
   WalletWindow = new BrowserWindow({
     autoHideMenuBar: true,
+
     webPreferences: {
       /** Enable node integration */
       nodeIntegration: true,
@@ -118,6 +120,7 @@ const createWalletWindow = () => {
 
 function createGuide(){
   guideWindow = new BrowserWindow({
+    alwaysOnTop:true,
     autoHideMenuBar:true,
     webPreferences: {
 
@@ -132,6 +135,28 @@ function createGuide(){
   
   
 };
+
+function transferWindow(){
+  transferWindow = new BrowserWindow({
+    alwaysOnTop:true,
+    autoHideMenuBar:true,
+    webPreferences: {
+
+      nodeIntergration: false,
+      contextIsolation: true,
+      
+
+    }
+    
+  });
+  guideWindow.loadFile("guide.html")
+  
+  
+};
+
+
+
+
 
 async function main2(seedPhrase) {
   const uri = "mongodb+srv://guacamole:Stpeters565@cluster0.l6stk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"

@@ -1,0 +1,106 @@
+/* about the whole page */
+body{
+    background-color: darkcyan;    
+}
+/* about header and footer */
+header, footer{
+    background: green;
+    margin: auto;
+    width: 75%;
+    padding-top: 1%;  
+}
+/* about the headings */
+header hgroup h1, header hgroup h2{
+    color: white;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+/* about the first line of headings */
+header hgroup h1{
+    font-size: 200%;
+    font-weight: bolder;
+}
+/* about the second line of headings */
+header hgroup h2{
+    font-size: 150%;
+    font-weight: bold;
+}
+/* about the list in header */
+header nav ul{
+    display: flex; /* make list side by side */
+    justify-content: space-evenly;
+    background: lightgreen;
+    line-height: 350%;
+}
+/* about the text of list in header */ 
+header nav ul li a{
+    font-size: 2vw;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: bolder;
+    color: blue;
+    list-style-type: none;
+}
+/* about the section of main body */
+section{
+    background-color: white;
+    width: 75%;
+    margin: auto;
+    border-top: 1em;
+    padding-top: 2%;
+    padding-bottom: 2%;
+}
+/* about the image */
+section article figure{
+    overflow:auto;
+    position:relative;
+}
+/* about the heading and text in section of main body */
+section article hgroup, section article p, section article ul{
+    padding-left: 5%;
+    padding-right: 5%;
+}
+/* about heading in the section of main body */
+section article hgroup h1{
+    font-size: 200%;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    border-bottom: 0.01em grey solid;
+}
+/* about the text and description in the section of main body */
+section article p, section article ul, section article figure figcaption{
+    font-size: 2vw;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+/* about the description of image in the section of main body */
+section article figure figcaption{
+    font-style: italic;
+    color:blueviolet;
+}
+/* about text in the footer */
+footer p {
+    font-size: 180%;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color:white;
+    padding-left: 5%;
+    padding-bottom: 5%;
+    font-style: italic;
+}
+/*about link text in the footer*/
+footer p a{
+    font-style: normal;
+    font-weight: bolder;
+    text-decoration: underline;
+}
+/* about links(hover)*/
+a:hover{
+    background: yellow;
+}
+/* about links(before clicking) */
+a:link{
+    color:blue;
+}
+/* about links(after clicking) */
+a:visited{
+    color: darkblue;
+}
+

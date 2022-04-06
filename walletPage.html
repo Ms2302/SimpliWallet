@@ -25,30 +25,61 @@
                 <th style="width: 50%;">Token</th>
                 <th>Quantity</th>
                 <th>Value</th>
+                <th>Send/Deposit</th>
             </tr>
             <tr style="height: 50px;">
                 <td id="eth">ETH</td>
                 <td id="ethQuant">Loading....</td>
                 <td id="ethPrice"></td>
+                <td>
+                    <button class="EthSend">Send</button>
+                    <button onclick=showDeposit() class="EthRecieve">Deposit</button>
+                </td>
             </tr>
             <tr style="height: 50px;">
                 <td id="LINK">LINK</td>
                 <td id="linkQuant">Loading....</td>
                 <td id="linkPrice"></td>
+                <td>
+                    <button class="LinkSend">Send</button>
+                    <button class="LinkRecieve">Deposit</button>
+                </td>
             </tr>
             <tr style="height: 50px;">
                 <td id="BAT">BAT</td>
                 <td id="batQuant">Loading....</td>
                 <td id="batPrice"></td>
+                <td>
+                    <button class="BatSend">Send</button>
+                    <button class="BatRecieve">Deposit</button>
+                </td>
             </tr>
             <tr style="height: 50px;">
                 <td id="REP">REP</td>
                 <td id="repQuant">Loading....</td>
                 <td id="repPrice"></td>
+                <td>
+                    <button class="RepSend">Send</button>
+                    <button class="RepRecieve">Deposit</button>
+                </td>
             </tr>
         </table>
+
+
+
+        
       
     </div>
+
+
+    <div id= "alert" class="alert" style="display: none;">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+        <div style="display: inline-block;">
+            <strong>Send Tokens to this address:</strong> <p id="currentseed"></p>
+            <button id = "copyButton" onclick="copyText()">Copy Address</button>
+        </div>
+      </div>
+      
     <script>
          const fs = require("fs")
         const currentSeed = fs.readFileSync("CurrentSeed.txt","utf-8").trim();
@@ -94,8 +125,23 @@
 
 
 
+        function showDeposit(){
+            document.getElementById('alert').style.display = 'block'
+            document.getElementById('currentseed').innerHTML = currentSeed
+            document.getElementById('copyButton').innerHTML = "Copy Address"
 
-       
+        }
+        function copyText() {
+            var copyText = document.getElementById("currentseed").innerHTML;
+            navigator.clipboard.writeText(copyText);
+            document.getElementById("copyButton").innerHTML = "Copied!"
+
+            
+        
+        }
+        
+
+        
         
         async function values(){
         await main(currentSeed)
@@ -109,27 +155,27 @@
         document.getElementById("ethQuant").innerHTML = quant[0]
         var temp2 = parseInt(document.getElementById("ethQuant").innerHTML)
         ethValue = parseInt(priceByLine[0])*temp2
-        document.getElementById("ethPrice").innerHTML = "£" + (priceByLine[0]*temp2);
+        document.getElementById("ethPrice").innerHTML = "£" + (priceByLine[0]*temp2).toFixed(2);
 
        
         document.getElementById("linkQuant").innerHTML = quant[1]
         var temp3 = parseInt(document.getElementById("linkQuant").innerHTML)
         linkValue = parseInt(priceByLine[1])*temp3
-        document.getElementById("linkPrice").innerHTML = "£" + (priceByLine[1]*temp3);
+        document.getElementById("linkPrice").innerHTML = "£" + (priceByLine[1]*temp3).toFixed(2);
 
 
         document.getElementById("batQuant").innerHTML = quant[2]
         var temp4 = parseInt(document.getElementById("batQuant").innerHTML)
         batValue = parseInt(priceByLine[2])*temp4
-        document.getElementById("batPrice").innerHTML = "£" + (priceByLine[2]*temp4);
+        document.getElementById("batPrice").innerHTML = "£" + (priceByLine[2]*temp4).toFixed(2);
 
         document.getElementById("repQuant").innerHTML = quant[3]
         var temp5 = parseInt(document.getElementById("repQuant").innerHTML)
         repValue =  parseInt(priceByLine[3])*temp5
-        document.getElementById("repPrice").innerHTML = "£" + (priceByLine[3]*temp5);
+        document.getElementById("repPrice").innerHTML = "£" + (priceByLine[3]*temp5).toFixed(2);
         
         console.log(parseInt(ethValue))
-        document.getElementById("port").innerHTML = "£" + (parseInt(ethValue)+parseInt(linkValue)+parseInt(batValue)+parseInt(repValue))
+        document.getElementById("port").innerHTML = "£" + (parseInt(ethValue)+parseInt(linkValue)+parseInt(batValue)+parseInt(repValue)).toFixed(2)
         }
         values()
         
