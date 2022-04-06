@@ -32,7 +32,7 @@
                 <td id="ethQuant">Loading....</td>
                 <td id="ethPrice"></td>
                 <td>
-                    <button class="EthSend">Send</button>
+                    <button onclick="openTransfer()" class="EthSend">Send</button>
                     <button onclick=showDeposit() class="EthRecieve">Deposit</button>
                 </td>
             </tr>
@@ -81,6 +81,7 @@
       </div>
       
     <script>
+        const { ipcRenderer } = require('electron');
          const fs = require("fs")
         const currentSeed = fs.readFileSync("CurrentSeed.txt","utf-8").trim();
         
@@ -135,9 +136,12 @@
             var copyText = document.getElementById("currentseed").innerHTML;
             navigator.clipboard.writeText(copyText);
             document.getElementById("copyButton").innerHTML = "Copied!"
+        }
 
-            
+        const CHANNEL_NAME4 = 'main4';
         
+        const openTransfer = () => {
+            console.log(ipcRenderer.sendSync(CHANNEL_NAME4, "open Transfer"));
         }
         
 

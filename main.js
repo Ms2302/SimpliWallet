@@ -149,7 +149,7 @@ function transferWindow(){
     }
     
   });
-  guideWindow.loadFile("guide.html")
+  //transferWindow.loadFile("guide.html")
   
   
 };
@@ -230,6 +230,12 @@ const init = async() => {
    event.returnValue = ("opened Guide")
   })
   
+  const CHANNEL_NAME4 = "main4";
+  ipcMain.on(CHANNEL_NAME4,(event,data)=> {
+    transferWindow()
+    event.returnValue = ("opened Transfer")
+
+  })
 
   
 };
