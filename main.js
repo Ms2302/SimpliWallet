@@ -100,7 +100,7 @@ const createWindow = () => {
 
 const createWalletWindow = () => {
   WalletWindow = new BrowserWindow({
-    autoHideMenuBar: true,
+    autoHideMenuBar: false,
 
     webPreferences: {
       /** Enable node integration */
@@ -123,33 +123,13 @@ function createGuide(){
     alwaysOnTop:true,
     autoHideMenuBar:true,
     webPreferences: {
-
-      nodeIntergration: false,
-      contextIsolation: true,
-      
-
+      /** Enable node integration */
+      nodeIntegration: true,
+      contextIsolation: false
     }
     
   });
   guideWindow.loadFile("guide.html")
-  
-  
-};
-
-function transferWindow(){
-  transferWindow = new BrowserWindow({
-    alwaysOnTop:true,
-    autoHideMenuBar:true,
-    webPreferences: {
-
-      nodeIntergration: false,
-      contextIsolation: true,
-      
-
-    }
-    
-  });
-  //transferWindow.loadFile("guide.html")
   
   
 };
@@ -212,6 +192,7 @@ const init = async() => {
         event.returnValue = ("Match Found")
         createWalletWindow()
         fs.writeFileSync("CurrentSeed.txt",data);
+        mainWindow.close()
         
       }
       
@@ -230,12 +211,7 @@ const init = async() => {
    event.returnValue = ("opened Guide")
   })
   
-  const CHANNEL_NAME4 = "main4";
-  ipcMain.on(CHANNEL_NAME4,(event,data)=> {
-    transferWindow()
-    event.returnValue = ("opened Transfer")
 
-  })
 
   
 };

@@ -18,6 +18,7 @@
         <br>
         
     </div>
+    <button onclick="reloadPage()">Refresh</button>
    
     <div>
         <table style="width: 100%;"> 
@@ -32,7 +33,7 @@
                 <td id="ethQuant">Loading....</td>
                 <td id="ethPrice"></td>
                 <td>
-                    <button onclick="openTransfer()" class="EthSend">Send</button>
+                    <button onclick="openFormEth()" class="EthSend">Send</button>
                     <button onclick=showDeposit() class="EthRecieve">Deposit</button>
                 </td>
             </tr>
@@ -41,8 +42,8 @@
                 <td id="linkQuant">Loading....</td>
                 <td id="linkPrice"></td>
                 <td>
-                    <button class="LinkSend">Send</button>
-                    <button class="LinkRecieve">Deposit</button>
+                    <button onclick="openFormLink()" class="LinkSend">Send</button>
+                    <button onclick=showDeposit() class="LinkRecieve">Deposit</button>
                 </td>
             </tr>
             <tr style="height: 50px;">
@@ -50,8 +51,8 @@
                 <td id="batQuant">Loading....</td>
                 <td id="batPrice"></td>
                 <td>
-                    <button class="BatSend">Send</button>
-                    <button class="BatRecieve">Deposit</button>
+                    <button onclick="openFormBAT()"class="BatSend">Send</button>
+                    <button onclick=showDeposit() class="BatRecieve">Deposit</button>
                 </td>
             </tr>
             <tr style="height: 50px;">
@@ -59,8 +60,8 @@
                 <td id="repQuant">Loading....</td>
                 <td id="repPrice"></td>
                 <td>
-                    <button class="RepSend">Send</button>
-                    <button class="RepRecieve">Deposit</button>
+                    <button onclick="openFormREP()" class="RepSend">Send</button>
+                    <button onclick=showDeposit() class="RepRecieve">Deposit</button>
                 </td>
             </tr>
         </table>
@@ -72,17 +73,91 @@
     </div>
 
 
-    <div id= "alert" class="alert" style="display: none;">
+    <div id= "sendEth" class="alert" style="display: none;">
         <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
         <div style="display: inline-block;">
             <strong>Send Tokens to this address:</strong> <p id="currentseed"></p>
             <button id = "copyButton" onclick="copyText()">Copy Address</button>
         </div>
       </div>
+
+    
+    
+
+      <div class="form-popup" id="ethSend">
+        <div class="form-container">
+          <h1>Send Eth</h1>
       
+          <label for="Address"><b>Enter Address</b></label>
+          <input id="AddressSendEth" type="text" placeholder="Enter Address" name="Address" required>
+      
+          <label for="Quantity"><b>Quantity</b></label>
+          <input id= "QuantSendEth" type="text" placeholder="Enter Quantity" name="Quantity" required>
+      
+          <button type="submit" class="btn" onclick="sendFormEth()">Send</button>
+          <button type="button" class="btn cancel" onclick="closeFormEth()">Cancel</button>
+        </div>
+      </div>
+
+
+      <div class="form-popup" id="linkSend">
+        <div class="form-container">
+          <h1>Send Link</h1>
+      
+          <label for="Address"><b>Enter Address</b></label>
+          <input id="AddressSendLink" type="text" placeholder="Enter Address" name="Address" required>
+      
+          <label for="Quantity"><b>Quantity</b></label>
+          <input id= "QuantSendLink" type="text" placeholder="Enter Quantity" name="Quantity" required>
+      
+          <button type="submit" class="btn" onclick="sendFormLink()">Send</button>
+          <button type="button" class="btn cancel" onclick="closeFormLink()">Cancel</button>
+        </div>
+      </div>
+      
+      <div class="form-popup" id="batSend">
+        <div class="form-container">
+          <h1>Send BAT</h1>
+      
+          <label for="Address"><b>Enter Address</b></label>
+          <input id="AddressSendBAT" type="text" placeholder="Enter Address" name="Address" required>
+      
+          <label for="Quantity"><b>Quantity</b></label>
+          <input id= "QuantSendBAT" type="text" placeholder="Enter Quantity" name="Quantity" required>
+      
+          <button type="submit" class="btn" onclick="sendFormBAT()">Send</button>
+          <button type="button" class="btn cancel" onclick="closeFormBAT()">Cancel</button>
+        </div>
+      </div>
+
+      <div class="form-popup" id="repSend">
+        <div class="form-container">
+          <h1>Send REP</h1>
+      
+          <label for="Address"><b>Enter Address</b></label>
+          <input id="AddressSendREP" type="text" placeholder="Enter Address" name="Address" required>
+      
+          <label for="Quantity"><b>Quantity</b></label>
+          <input id= "QuantSendREP" type="text" placeholder="Enter Quantity" name="Quantity" required>
+      
+          <button type="submit" class="btn" onclick="sendFormREP()">Send</button>
+          <button type="button" class="btn cancel" onclick="closeFormREP()">Cancel</button>
+        </div>
+      </div>
+
+
+
+
+
+
+
+
+
+
+
     <script>
         const { ipcRenderer } = require('electron');
-         const fs = require("fs")
+        const fs = require("fs")
         const currentSeed = fs.readFileSync("CurrentSeed.txt","utf-8").trim();
         
         console.log(currentSeed)
@@ -120,14 +195,204 @@
         }
         }
 
+        async function reloadPage(){
+            const uri = "mongodb+srv://guacamole:Stpeters565@cluster0.l6stk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+            const client = new MongoClient(uri);
+            reload(client)
+        }
+
+        async function reload(client){
+            await client.connect()
+            await findUserBySeed(client,currentSeed)
+            window.location.reload()
+            console.log("reloaded")
+        }
       
-   
+        function openFormEth() {
+             document.getElementById("ethSend").style.display = "block";
+        }
+
+        function openFormLink() {
+             document.getElementById("linkSend").style.display = "block";
+        }
+        function openFormBAT() {
+             document.getElementById("batSend").style.display = "block";
+        }
+        function openFormREP() {
+             document.getElementById("repSend").style.display = "block";
+        }
+
+        function closeFormEth() {
+             document.getElementById("ethSend").style.display = "none";
+        }
+
+        function closeFormLink() {
+             document.getElementById("linkSend").style.display = "none";
+        }
+        function closeFormBAT() {
+             document.getElementById("batSend").style.display = "none";
+        }
+        function closeFormREP() {
+             document.getElementById("repSend").style.display = "none";
+        }
+
+        function sendFormEth() {
+
+        document.getElementById("ethSend").style.display = "none";
+        const uri = "mongodb+srv://guacamole:Stpeters565@cluster0.l6stk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+        const client = new MongoClient(uri);
+        
+        const address = document.getElementById("AddressSendEth").value;
+        console.log(address)
+        const quant = parseInt(document.getElementById("QuantSendEth").value);
+
+
+        async function updateEth(client,address,updatedEth){
+          
+            await client.connect()
+            const result = await client.db("WalletUsers").collection("UserValues").updateOne({seed: address},{$inc: updatedEth});
+            console.log(`${result.matchedCount} document(s) matched the query criteria`);
+            console.log(`${result.modifiedCount} documents was/were updated`);
+        }
+
+        async function updateEthCurrent(client,address,updatedEth){
+          
+          await client.connect()
+          const result = await client.db("WalletUsers").collection("UserValues").updateOne({seed: address},{$inc: updatedEth});
+          console.log(`${result.matchedCount} document(s) matched the query criteria`);
+          console.log(`${result.modifiedCount} documents was/were updated`);
+      }
+
+
+        updateEth(client,address,{EthQuant:quant})
+        const negative = 0 - quant;
+        console.log(negative)
+        updateEthCurrent(client,currentSeed,{EthQuant:negative})
+        reload(client)
+        }
+
+
+
+        function sendFormLink() {
+
+            document.getElementById("linkSend").style.display = "none";
+            const uri = "mongodb+srv://guacamole:Stpeters565@cluster0.l6stk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+            const client = new MongoClient(uri);
+
+            const address = document.getElementById("AddressSendLink").value;
+            console.log(address)
+            const quant = parseInt(document.getElementById("QuantSendLink").value);
+
+
+            async function updateLink(client,address,updatedLink){
+            
+                await client.connect()
+                const result = await client.db("WalletUsers").collection("UserValues").updateOne({seed: address},{$inc: updatedLink});
+                console.log(`${result.matchedCount} document(s) matched the query criteria`);
+                console.log(`${result.modifiedCount} documents was/were updated`);
+            }
+
+            async function updateLinkCurrent(client,address,updatedLink){
+            
+            await client.connect()
+            const result = await client.db("WalletUsers").collection("UserValues").updateOne({seed: address},{$inc: updatedLink});
+            console.log(`${result.matchedCount} document(s) matched the query criteria`);
+            console.log(`${result.modifiedCount} documents was/were updated`);
+            }
+
+
+            updateLink(client,address,{LinkQuant:quant})
+            const negative = 0 - quant;
+            console.log(negative)
+            updateLinkCurrent(client,currentSeed,{LinkQuant:negative})
+            reload(client)
+            }
+
+
+
+
+
+
+        function sendFormBAT() {
+
+            document.getElementById("batSend").style.display = "none";
+            const uri = "mongodb+srv://guacamole:Stpeters565@cluster0.l6stk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+            const client = new MongoClient(uri);
+
+            const address = document.getElementById("AddressSendBAT").value;
+            console.log(address)
+            const quant = parseInt(document.getElementById("QuantSendBAT").value);
+
+
+            async function updateBAT(client,address,updatedBAT){
+
+                await client.connect()
+                const result = await client.db("WalletUsers").collection("UserValues").updateOne({seed: address},{$inc: updatedBAT});
+                console.log(`${result.matchedCount} document(s) matched the query criteria`);
+                console.log(`${result.modifiedCount} documents was/were updated`);
+            }
+
+            async function updateBATCurrent(client,address,updatedBAT){
+
+            await client.connect()
+            const result = await client.db("WalletUsers").collection("UserValues").updateOne({seed: address},{$inc: updatedBAT});
+            console.log(`${result.matchedCount} document(s) matched the query criteria`);
+            console.log(`${result.modifiedCount} documents was/were updated`);
+            }
+
+
+            updateBAT(client,address,{BatQuant:quant})
+            const negative = 0 - quant;
+            console.log(negative)
+            updateBATCurrent(client,currentSeed,{BatQuant:negative})
+            reload(client)
+            }
+
+
+            
+        function sendFormREP() {
+
+            document.getElementById("repSend").style.display = "none";
+            const uri = "mongodb+srv://guacamole:Stpeters565@cluster0.l6stk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+            const client = new MongoClient(uri);
+
+            const address = document.getElementById("AddressSendREP").value;
+            console.log(address)
+            const quant = parseInt(document.getElementById("QuantSendREP").value);
+
+
+            async function updateREP(client,address,updatedREP){
+
+                await client.connect()
+                const result = await client.db("WalletUsers").collection("UserValues").updateOne({seed: address},{$inc: updatedREP});
+                console.log(`${result.matchedCount} document(s) matched the query criteria`);
+                console.log(`${result.modifiedCount} documents was/were updated`);
+            }
+
+            async function updateREPCurrent(client,address,updatedREP){
+
+            await client.connect()
+            const result = await client.db("WalletUsers").collection("UserValues").updateOne({seed: address},{$inc: updatedREP});
+            console.log(`${result.matchedCount} document(s) matched the query criteria`);
+            console.log(`${result.modifiedCount} documents was/were updated`);
+            }
+
+
+            updateREP(client,address,{RepQuant:quant})
+            const negative = 0 - quant;
+            console.log(negative)
+            updateREPCurrent(client,currentSeed,{RepQuant:negative})
+            reload(client)
+            }
+
+
+
 
 
 
 
         function showDeposit(){
-            document.getElementById('alert').style.display = 'block'
+            document.getElementById('sendEth').style.display = 'block'
             document.getElementById('currentseed').innerHTML = currentSeed
             document.getElementById('copyButton').innerHTML = "Copy Address"
 
@@ -138,11 +403,7 @@
             document.getElementById("copyButton").innerHTML = "Copied!"
         }
 
-        const CHANNEL_NAME4 = 'main4';
-        
-        const openTransfer = () => {
-            console.log(ipcRenderer.sendSync(CHANNEL_NAME4, "open Transfer"));
-        }
+       
         
 
         
