@@ -6,20 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WalletPage</title>
     <link rel = "stylesheet" href="walletPage.css">
-
 </head>
 <body>
     <div class="Title">
-        <h4>Wallet Page</h4>
-        <br>
-        <label for="port">Portfolio Value:    </label>
-        <strong id="port"></strong>
+        <h1 class="walletPageTitle">SimpliWallet</h1>
+        <label class="Portfolio" for="port">Portfolio Value:    </label>
+        <strong class= "Portfolio" id="port"></strong>
         <br>
         <br>
         
     </div>
-    <button onclick="reloadPage()">Refresh</button>
-   
+    <button class="button" onclick="reloadPage()">Refresh</button>
+    <hr>
+    <div class="container">
+        <canvas id="portGraph" ></canvas>
+      </div>
     <div>
         <table style="width: 100%;"> 
             <tr>
@@ -152,10 +153,23 @@
 
 
 
+      
+      <div class="containerLine">
+        <canvas id="portGraphLine" ></canvas>
+      </div>
 
-
-
+      <button class="button" onclick="generateReport()">Generate Report</button>
     <script>
+        const Chart = require('chart.js');
+     
+       
+        var formatter = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'GBP',});
+        
+
+
+
         const { ipcRenderer } = require('electron');
         const fs = require("fs")
         const currentSeed = fs.readFileSync("CurrentSeed.txt","utf-8").trim();
@@ -236,7 +250,7 @@
              document.getElementById("repSend").style.display = "none";
         }
 
-        function sendFormEth() {
+        async function sendFormEth() {
 
         document.getElementById("ethSend").style.display = "none";
         const uri = "mongodb+srv://guacamole:Stpeters565@cluster0.l6stk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
@@ -264,16 +278,16 @@
       }
 
 
-        updateEth(client,address,{EthQuant:quant})
+        await updateEth(client,address,{EthQuant:quant})
         const negative = 0 - quant;
         console.log(negative)
-        updateEthCurrent(client,currentSeed,{EthQuant:negative})
+        await updateEthCurrent(client,currentSeed,{EthQuant:negative})
         reload(client)
         }
 
 
 
-        function sendFormLink() {
+        async function sendFormLink() {
 
             document.getElementById("linkSend").style.display = "none";
             const uri = "mongodb+srv://guacamole:Stpeters565@cluster0.l6stk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
@@ -301,10 +315,10 @@
             }
 
 
-            updateLink(client,address,{LinkQuant:quant})
+            await updateLink(client,address,{LinkQuant:quant})
             const negative = 0 - quant;
             console.log(negative)
-            updateLinkCurrent(client,currentSeed,{LinkQuant:negative})
+            await updateLinkCurrent(client,currentSeed,{LinkQuant:negative})
             reload(client)
             }
 
@@ -313,7 +327,7 @@
 
 
 
-        function sendFormBAT() {
+        async function sendFormBAT() {
 
             document.getElementById("batSend").style.display = "none";
             const uri = "mongodb+srv://guacamole:Stpeters565@cluster0.l6stk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
@@ -341,16 +355,16 @@
             }
 
 
-            updateBAT(client,address,{BatQuant:quant})
+            await updateBAT(client,address,{BatQuant:quant})
             const negative = 0 - quant;
             console.log(negative)
-            updateBATCurrent(client,currentSeed,{BatQuant:negative})
+            await updateBATCurrent(client,currentSeed,{BatQuant:negative})
             reload(client)
             }
 
 
             
-        function sendFormREP() {
+        async function sendFormREP() {
 
             document.getElementById("repSend").style.display = "none";
             const uri = "mongodb+srv://guacamole:Stpeters565@cluster0.l6stk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
@@ -378,10 +392,10 @@
             }
 
 
-            updateREP(client,address,{RepQuant:quant})
+            await updateREP(client,address,{RepQuant:quant})
             const negative = 0 - quant;
             console.log(negative)
-            updateREPCurrent(client,currentSeed,{RepQuant:negative})
+            await updateREPCurrent(client,currentSeed,{RepQuant:negative})
             reload(client)
             }
 
@@ -405,10 +419,12 @@
 
        
         
-
-        
+       
         
         async function values(){
+
+           
+                
         await main(currentSeed)
         const quants = fs.readFileSync('CurrentQuants.txt','utf-8') 
         const data = fs.readFileSync('Prices.txt','utf-8') 
@@ -420,29 +436,161 @@
         document.getElementById("ethQuant").innerHTML = quant[0]
         var temp2 = parseInt(document.getElementById("ethQuant").innerHTML)
         ethValue = parseInt(priceByLine[0])*temp2
-        document.getElementById("ethPrice").innerHTML = "£" + (priceByLine[0]*temp2).toFixed(2);
+        document.getElementById("ethPrice").innerHTML = formatter.format((priceByLine[0]*temp2).toFixed(2));
 
        
         document.getElementById("linkQuant").innerHTML = quant[1]
         var temp3 = parseInt(document.getElementById("linkQuant").innerHTML)
         linkValue = parseInt(priceByLine[1])*temp3
-        document.getElementById("linkPrice").innerHTML = "£" + (priceByLine[1]*temp3).toFixed(2);
+        document.getElementById("linkPrice").innerHTML = formatter.format((priceByLine[1]*temp3).toFixed(2));
 
 
         document.getElementById("batQuant").innerHTML = quant[2]
         var temp4 = parseInt(document.getElementById("batQuant").innerHTML)
         batValue = parseInt(priceByLine[2])*temp4
-        document.getElementById("batPrice").innerHTML = "£" + (priceByLine[2]*temp4).toFixed(2);
+        document.getElementById("batPrice").innerHTML = formatter.format((priceByLine[2]*temp4).toFixed(2));
 
         document.getElementById("repQuant").innerHTML = quant[3]
         var temp5 = parseInt(document.getElementById("repQuant").innerHTML)
         repValue =  parseInt(priceByLine[3])*temp5
-        document.getElementById("repPrice").innerHTML = "£" + (priceByLine[3]*temp5).toFixed(2);
+        document.getElementById("repPrice").innerHTML = formatter.format((priceByLine[3]*temp5).toFixed(2));
         
         console.log(parseInt(ethValue))
-        document.getElementById("port").innerHTML = "£" + (parseInt(ethValue)+parseInt(linkValue)+parseInt(batValue)+parseInt(repValue)).toFixed(2)
+        document.getElementById("port").innerHTML =formatter.format(((parseInt(ethValue)+parseInt(linkValue)+parseInt(batValue)+parseInt(repValue)).toFixed(2)))
+
+
+
+
+        const quants2 = fs.readFileSync('CurrentQuants.txt','utf-8') 
+        const quant2 = quants2.split("\n") 
+        const data2 = {
+            labels: [
+                'ETH',
+                'LINK',
+                'BAT',
+                'REP'
+            ],
+            datasets: [{
+                
+                data: [quant2[0],quant2[1], quant2[2],quant2[3]],
+                backgroundColor: [
+                'rgb(255, 99, 132)',
+                'rgb(54, 162, 235)',
+                'rgb(255, 205, 86)',
+                'rgb(120, 63, 112)'
+                ],
+                hoverOffset: 4
+            }]
+            };
+
+            const config = {
+            type: 'doughnut',
+            data: data2,
+            };
+
+
+
+            const myChart = new Chart(
+                document.getElementById("portGraph"),
+                config
+            )
+        const currentPort = (parseInt(ethValue)+parseInt(linkValue)+parseInt(batValue)+parseInt(repValue)).toFixed(2)
+        console.log(currentPort)
+        const entry1 = Math.floor(Math.random() * currentPort * 0.75) + (currentPort * 0.5)
+        const entry2 = Math.floor(Math.random() * currentPort * 0.75 ) + (currentPort * 0.5)
+        const entry3 = Math.floor(Math.random() * currentPort * 0.75) + (currentPort * 0.5)
+        
+
+
+        const quants3 = fs.readFileSync('CurrentQuants.txt','utf-8') 
+        const quant3 = quants2.split("\n") 
+        const data3 = {
+            labels: [
+                'JAN',
+                'FEB',
+                'MAR',
+                'APR'
+            ],
+            datasets: [{
+                
+                data: [entry1,entry2,entry3,currentPort],
+                backgroundColor: "rgba(75,192,192,0.4)",
+                borderColor: "rgb(120, 202, 112)",
+                hoverOffset: 4
+                
+            }]
+            };
+
+            const config2 = {
+            type: 'line',
+            data: data3,
+            options:{
+                scales:{
+                    y:{
+                        ticks:{
+                            callback: function(value, index, ticks){
+                                return "£" + value;
+                            }
+                        }
+                    }
+                },
+                plugins:{
+
+                    legend:{
+                        display: false,
+                    },
+                
+                title:{
+                    display: true,
+                    text: 'Portfolio Performance'
+
+                }
+            }
         }
+            };
+
+            const lineChart = new Chart(
+                document.getElementById("portGraphLine"),
+                config2
+            )
+        }
+
+
+       
+
+        
         values()
+        const { jsPDF } = require("jspdf")
+
+         function generateReport(){
+
+            const quants2 = fs.readFileSync('CurrentQuants.txt','utf-8') 
+            const quant2 = quants2.split("\n") 
+            const currentPort = formatter.format(((parseInt(ethValue)+parseInt(linkValue)+parseInt(batValue)+parseInt(repValue)).toFixed(2)))
+
+
+            const pdfPie = document.getElementById('portGraph')
+            const pdfPieImage = pdfPie.toDataURL('image/jepg',1.0)
+            const doc = new jsPDF();
+            doc.setFont("helvetica", "bold");
+
+            doc.text("Portfolio Performance",105, 10, null, null, "center");
+            doc.text("Portfolio Value: £" + currentPort,105, 20, null, null, "center");
+            doc.text("Portfolio Buildup",10,40);
+            doc.setFont("helvetica");
+            doc.text("ETH owned: " + quant2[0],10,45);
+            doc.text("LINK owned: " + quant2[1],10,50);
+            doc.text("BAT owned: " + quant2[2],10,55);
+            doc.text("REP owned: " + quant2[3],10,60);
+
+
+            
+
+
+            doc.addImage(pdfPieImage,"JPEG", 50, 80, 100, 100)
+            doc.save("Report.pdf");
+        }
+
         
     </script>
 </body>

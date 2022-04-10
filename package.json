@@ -7,7 +7,9 @@
         "electron": "^5.0.1"
     },
     "dependencies": {
+        "chart.js": "^3.7.1",
         "coingecko-api": "^1.0.10",
+        "jspdf": "^2.5.1",
         "mongodb": "^4.4.1",
         "mongoose": "^6.2.8"
     }

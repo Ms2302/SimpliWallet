@@ -83,6 +83,7 @@ price()
 const createWindow = () => {
   mainWindow = new BrowserWindow({
     alwaysOnTop: true,
+    
     webPreferences: {
       /** Enable node integration */
       nodeIntegration: true,
@@ -91,7 +92,6 @@ const createWindow = () => {
   });
 
   /** Open devTools */
-  mainWindow.webContents.openDevTools();
 
   /** Load the index.html page */
   mainWindow.loadFile('index.html');
@@ -100,6 +100,7 @@ const createWindow = () => {
 
 const createWalletWindow = () => {
   WalletWindow = new BrowserWindow({
+    
     autoHideMenuBar: false,
 
     webPreferences: {
@@ -165,6 +166,7 @@ async function main2(seedPhrase) {
 const init = async() => {
   /** Create app window */
   createWindow();
+  mainWindow.maximize();
   
   const CHANNEL_NAME = "main";
 
@@ -179,6 +181,7 @@ const init = async() => {
     console.log(phrase);
     event.returnValue = (phrase)
     createWalletWindow()
+    WalletWindow.maximize()
     console.log("done2")
   })
 
@@ -191,6 +194,7 @@ const init = async() => {
       if(data.concat("\r") == textByLine[i]){
         event.returnValue = ("Match Found")
         createWalletWindow()
+        WalletWindow.maximize()
         fs.writeFileSync("CurrentSeed.txt",data);
         mainWindow.close()
         
