@@ -137,6 +137,24 @@ function createGuide(){
 
 
 
+function createSupport(){
+  SupportWindow = new BrowserWindow({
+    alwaysOnTop:true,
+    autoHideMenuBar:true,
+    webPreferences: {
+      /** Enable node integration */
+      nodeIntegration: true,
+      contextIsolation: false
+    }
+    
+  });
+  SupportWindow.loadFile("support_and_faq.html")
+  
+  
+};
+
+
+
 
 
 async function main2(seedPhrase) {
@@ -212,11 +230,19 @@ const init = async() => {
   ipcMain.on(CHANNEL_NAME3,(event,data) => {
     console.log(data)
    createGuide()
+   guideWindow.maximize()
    event.returnValue = ("opened Guide")
   })
   
 
+  const CHANNEL_NAME4 = "main4";
 
+  ipcMain.on(CHANNEL_NAME4,(event,data) => {
+    console.log(data)
+   createSupport()
+   SupportWindow.maximize()
+   event.returnValue = ("opened support")
+  })
   
 };
 /**

@@ -277,12 +277,18 @@
           console.log(`${result.modifiedCount} documents was/were updated`);
       }
 
+        if(parseInt(document.getElementById("ethQuant").innerHTML) >= quant){
+            await updateEth(client,address,{EthQuant:quant})
+            const negative = 0 - quant;
+            console.log(negative)
+            await updateEthCurrent(client,currentSeed,{EthQuant:negative})
+            reload(client)
+        }
+        else{
+            alert("Insufficient funds")
+            reload(client)
 
-        await updateEth(client,address,{EthQuant:quant})
-        const negative = 0 - quant;
-        console.log(negative)
-        await updateEthCurrent(client,currentSeed,{EthQuant:negative})
-        reload(client)
+        }
         }
 
 
@@ -314,12 +320,18 @@
             console.log(`${result.modifiedCount} documents was/were updated`);
             }
 
-
+            if(parseInt(document.getElementById("linkQuant").innerHTML) >= quant){
             await updateLink(client,address,{LinkQuant:quant})
             const negative = 0 - quant;
             console.log(negative)
             await updateLinkCurrent(client,currentSeed,{LinkQuant:negative})
             reload(client)
+            }
+            else{
+            alert("Insufficient funds")
+            reload(client)
+
+        }
             }
 
 
@@ -354,12 +366,18 @@
             console.log(`${result.modifiedCount} documents was/were updated`);
             }
 
-
+            if(parseInt(document.getElementById("batQuant").innerHTML) >= quant){
             await updateBAT(client,address,{BatQuant:quant})
             const negative = 0 - quant;
             console.log(negative)
             await updateBATCurrent(client,currentSeed,{BatQuant:negative})
             reload(client)
+            }
+            else{
+            alert("Insufficient funds")
+            reload(client)
+
+        }
             }
 
 
@@ -391,12 +409,18 @@
             console.log(`${result.modifiedCount} documents was/were updated`);
             }
 
-
+            if(parseInt(document.getElementById("repQuant").innerHTML) >= quant){
             await updateREP(client,address,{RepQuant:quant})
             const negative = 0 - quant;
             console.log(negative)
             await updateREPCurrent(client,currentSeed,{RepQuant:negative})
             reload(client)
+            }
+            else{
+            alert("Insufficient funds")
+            reload(client)
+
+        }
             }
 
 
